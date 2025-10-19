@@ -31,21 +31,138 @@
             <button type="submit" id="search-button">Search</button>
         </div>
     </div>
-    <div id="filter">
-        <div id="filter-type">
-            <h2>Type:</h2>
-            <ul>
-                <li>Song</li>
-                <li>Artist</li>
-                <li>Album</li>
-            </ul>
+    <div class="filter">
+        <ul class="filter-options">
+            Type:
+            <li>
+                <label>
+                    <input type="checkbox" name="type" value="track" class="checkbox">
+                    Track
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="checkbox" name="type" value="artist" class="checkbox">
+                    Artist
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="checkbox" name="type" value="album" class="checkbox">
+                    Album
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="checkbox" name="type" value="playlist" class="checkbox">
+                    Playlist
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="checkbox" name="type" value="show" class="checkbox">
+                    Show
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="checkbox" name="type" value="episode" class="checkbox">
+                    Episode
+                </label>
+            </li>
+        </ul>
+        <ul class="filter-options">
+            Genre (only artists):
+            <li>
+                <label>
+                    <input type="checkbox" name="genre" value="pop" class="checkbox">
+                    Pop
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="checkbox" name="genre" value="hip-hop" class="checkbox">
+                    Hip-Hop
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="checkbox" name="genre" value="rock" class="checkbox">
+                    Rock
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="checkbox" name="genre" value="country" class="checkbox">
+                    Country
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="checkbox" name="genre" value="edm" class="checkbox">
+                    EDM
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="checkbox" name="genre" value="latin" class="checkbox">
+                    Latin
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="checkbox" name="genre" value="k-pop" class="checkbox">
+                    K-pop
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="checkbox" name="genre" value="r-n-b" class="checkbox">
+                    R&B / Soul
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="checkbox" name="genre" value="jazz" class="checkbox">
+                    Jazz
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="checkbox" name="genre" value="classical" class="checkbox">
+                    Classical
+                </label>
+            </li>
+        </ul>
+        <div class="filter-options" id="year-release">
+            <label for="year-from">Release Years:</label>
+            <input type="number" id="year-from" placeholder="Year From" min="1900" max="2025" class="year-input">
+            <input type="number" id="year-to" placeholder="Year To" min="1900" max="2025" class="year-input">
         </div>
     </div>
+    <div class="filter" id="sticky-container">
+        <ul class="filter-options" id="sort-ul">
+            Sort by:
+            <li><button class="sort-button">Popularity</button></li>
+            <li><button class="sort-button">Year</button></li>
+            <li><button class="sort-button">Name</button></li>
+            <li><button class="sort-button">Length</button></li>
+        </ul>
+    </div>
     <section id="body-section">
-        <div class="header-sticky">
-            <h1>GUTS Song Finder</h1>
+        <div id="song-div">
+
         </div>
     </section>
+    <footer>
+        <h1>Credits:</h1>
+        <h1>Adam</h1>
+        <h1>Carl</h1>
+        <h1>Luca</h1>
+        <h1>Lutfy</h1>
+        <h1>Lydon</h1>
+        <h1>Yang</h1>
+    </footer>
 </body>
 
 </html>
