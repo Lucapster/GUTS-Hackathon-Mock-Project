@@ -1,0 +1,138 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    height: fit-content;
+
+    width: 100%;
+    padding-top: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    background-color: #181818;
+    border-bottom: 1px solid #dee2e6;
+}
+
+/*Header 1*/
+#top-head-section {
+    position: fixed;
+    top: 0;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #121212;
+    border-bottom: 1px solid #32dde3;
+    z-index: 100;
+    padding: 1rem;
+    width: 100%;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+#top-head-section h1 {
+    color: #32dde3;
+}
+
+#top-head-section img {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+    border-radius: 50%;
+    border: 1px solid #32dde3;
+}
+
+.profile-link {
+    display: inline-flex;
+    align-items: center;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+}
+
+.header-div {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 100%;
+}
+
+/*Header 2*/
+#search-sticky {
+    position: sticky;
+    top: 80px;
+    z-index: 99;
+    padding: 1rem;
+    width: 100%;
+    background-color: transparent;
+}
+
+#search-container {
+    position: relative;
+    width: 100%;
+}
+
+.h2h1 {
+    margin-top: 2rem;
+    margin-bottom: 0px;
+    font-size: 4rem;
+    color: #32dde3;
+}
+
+#search-bar {
+    margin-top: 1rem;
+    width: 80%;
+    border-radius: 25px;
+    padding: 0.5rem;
+    padding-right: 3rem;
+    font-size: 1rem;
+    border: 2px solid #32dde3;
+    color: #102a43;
+    box-sizing: border-box;
+}
+
+#search-bar::placeholder {
+    color: #102a43;
+}
+
+#search-button{
+    position: absolute;
+    right: 8rem;
+    top: 50%;
+    transform: translateY(-15%);
+    border: none;
+    background-color: transparent;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #102a43;
+}
+
+
+
+#filter{
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    background-color: #282828;
+    padding: 1rem;
+    border: 1px solid #32dde3;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+#body-section {
+    height: 8000px;
+    position: relative;
+    background-color: #404040;
+}
