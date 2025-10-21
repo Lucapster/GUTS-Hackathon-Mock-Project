@@ -5,7 +5,6 @@ class Song {
     this.title = title;
     this.artist = artist;
     this.album = album;
-    this.duration = duration;
   }
 
   add_to_playlist(playlist) {
