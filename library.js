@@ -1,35 +1,62 @@
 // This will probably be a part of profile-script.js in the future
 
+
+import pool from './connect_to_db.js'
+
+
 class Song {
-  constructor(title, artist, album, duration) {
+  constructor(song_id, title, artists, album, duration, popularity, is_explicit) {
+    this.song_id = song_id;
     this.title = title;
-    this.artist = artist;
+    this.artists = artists;
     this.album = album;
+    this.duration = duration;
+    this.popularity = popularity;
+    this.is_explicit = is_explicit;
   }
 
   add_to_playlist(playlist) {
     playlists[playlist].add_song(this);
-    // and SQL stuff
+    }
   }
-}
 
 class Playlist {
   constructor(songs = []) {
     this.songs = songs;
   }
 
-  add_song(song) {
+  async add_song(song) {
     if (song != null) {
       this.songs.push(song);
-      // and SQL stuff
+      try {
+            const [results, fields] = await pool.query(
+              'INSERT INTO playlist_song (playlist_id, spotify_id) VALUES (?, ?)', [this.playlist_id, song.song_id] //'playlist_song' is the name of the relationship table
+            );
+            console.log(results); 
+            console.log(fields); 
+      } 
+      catch (err) {
+        console.log(err);
+      }
+
     }
   }
 
   remove_song(index) {
     index = Number(index);
-    if (!Number.isNaN(index) && index >= 0 && index < this.songs.length) {
+    is_a_number = !Number.isNaN(index); 
+    if (is_a_number && index >= 0 && index < this.songs.length) {
+      song_object = this.songs[index] 
       this.songs.splice(index, 1);
-      // and SQL stuff
+      try {
+          const [results, fields] = await pool.query(
+            'DELETE FROM playlist_song WHERE song_id=? AND index=?', [song_object.song_id, index] //'playlist_song' is the name of the relationship table
+          );
+          console.log(results); 
+          console.log(fields); 
+        } catch (err) {
+          console.log(err);
+        }
     }
   }
 }
