@@ -1,14 +1,17 @@
 // This will probably be a part of profile-script.js in the future
 
 class Song {
-  constructor(title, artist, album, duration) {
+  constructor(id, title, artist, album, duration) {
+    this.id = id;
     this.title = title;
     this.artist = artist;
     this.album = album;
+    this.duration = duration;
+    this.explicit = false; // default value
   }
 
   add_to_playlist(playlist) {
-    playlists[playlist].add_song(this);
+    userLibrary.playlists[playlist].add_song(this);
     // and SQL stuff
   }
 }
@@ -21,15 +24,15 @@ class Playlist {
   add_song(song) {
     if (song != null) {
       this.songs.push(song);
-      // and SQL stuff
     }
   }
 
   remove_song(index) {
     index = Number(index);
     if (!Number.isNaN(index) && index >= 0 && index < this.songs.length) {
+      const songId = this.songs[index].id;
       this.songs.splice(index, 1);
-      // and SQL stuff
+      // and SQL stuff with index and id
     }
   }
 }
@@ -38,9 +41,32 @@ class Library {
   constructor(playlists = []) {
     this.playlists = playlists;
   }
+
+  add_playlist(playlist) {
+    if (playlist != null) {
+      this.playlists.push(playlist);
+      // and SQL stuff
+    }
+  }
 }
 
-const library = new Library();
+let userLibrary = new Library();
+let entered_playlist = false;
+userLibrary.add_playlist(new Playlist());
+userLibrary.add_playlist(new Playlist());
+userLibrary.add_playlist(new Playlist());
+
+// temporary values for testing
+userLibrary.playlists[0].add_song('Song A');
+userLibrary.playlists[0].add_song('Song B');
+userLibrary.playlists[0].add_song('Song C');
+userLibrary.playlists[0].add_song('Song D');
+userLibrary.playlists[0].add_song('Song E');
+userLibrary.playlists[1].add_song('Song F');
+userLibrary.playlists[1].add_song('Song G');
+userLibrary.playlists[2].add_song('Song H');
+userLibrary.playlists[2].add_song('Song I');
+userLibrary.playlists[2].add_song('Song J');
 
 function renderLibrary() {
   const container = document.getElementById('library');
@@ -48,7 +74,7 @@ function renderLibrary() {
   container.innerHTML = ''; // clear
 
   const ul = document.createElement('ul');
-  library.playlists.forEach((playlist, i) => {
+  userLibrary.playlists.forEach((playlist, i) => {
     const li = document.createElement('li');
     li.textContent = playlist.name;
 
@@ -65,27 +91,25 @@ function renderLibrary() {
   container.appendChild(ul);
 }
 
-let playlists = [];
-
-let playlist0 = new Playlist();
-playlists.push(playlist0);
-let playlist1 = new Playlist();
-playlists.push(playlist1);
-let playlist2 = new Playlist();
-playlists.push(playlist2);
-// temporary values for testing
-playlists[0].add_song('Song A');
-playlists[0].add_song('Song B');
-playlists[0].add_song('Song C');
-
 // render function: builds DOM for the playlist and buttons
 function renderPlaylist(playlist_index) {
   const container = document.getElementById('playlist');
   if (!container) return;
-  container.innerHTML = ''; // clear
+  entered_playlist = true;
+  container.innerHTML = '';
+
+  const back = document.createElement('button');
+  back.type = 'button';
+  back.id = 'back-to-library';
+  back.textContent = 'Back to library';
+  container.appendChild(back);
+
+  const title = document.createElement('h2');
+  title.textContent = userLibrary.playlists[playlist_index].name || `Playlist ${playlist_index}`;
+  container.appendChild(title);
 
   const ul = document.createElement('ul');
-  playlists[playlist_index].songs.forEach((song, i) => {
+  userLibrary.playlists[playlist_index].songs.forEach((song, i) => {
     const li = document.createElement('li');
     li.textContent = song;
 
@@ -102,24 +126,45 @@ function renderPlaylist(playlist_index) {
   container.appendChild(ul);
 }
 
-//testing playlist
-test_playlist_amount = 2;
-playlist_index = 0;
+function unrenderPlaylist() {
+  const container = document.getElementById('playlist');
+  if (container) container.innerHTML = '';
+  playlist_index = null;
+  entered_playlist = false;
+  renderLibrary();
+}
 
 // event delegation: one listener handles all remove clicks
 document.addEventListener('DOMContentLoaded', () => {
-  renderPlaylist(playlist_index);
+  renderLibrary();
 
-  const container = document.getElementById('playlist');
-  if (!container) return;
+  const libraryContainer = document.getElementById('library');
+  if (!libraryContainer) return;
+  const playlistContainer = document.getElementById('playlist');
+  if (!playlistContainer) return;
 
-  container.addEventListener('click', (e) => {
+  libraryContainer.addEventListener('click', (e) => {
+    const btn = e.target;
+    if (btn.classList && btn.classList.contains('enter-playlist')) {
+      const idx = btn.dataset.index;
+      if (entered_playlist) unrenderPlaylist();
+      playlist_index = idx;
+      renderPlaylist(playlist_index);
+    }
+  });
+
+  playlistContainer.addEventListener('click', (e) => {
+    console.log('Playlist container clicked', e);
     const btn = e.target;
     if (btn.classList && btn.classList.contains('remove-song')) {
       const idx = btn.dataset.index;
       console.log('Removing index', idx);
-      playlists[playlist_index].remove_song(idx);
+      userLibrary.playlists[playlist_index].remove_song(idx);
       renderPlaylist(playlist_index); // re-render with updated indexes
+    }
+    if (btn.id === 'back-to-library') {
+      console.log('Back to library button clicked');
+      unrenderPlaylist();
     }
   });
 });
