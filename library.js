@@ -1,18 +1,16 @@
-// This will probably be a part of profile-script.js in the future
-
 class Song {
-  constructor(id, title, artist, album, duration) {
-    this.id = id;
+  constructor(song_id, title, artists, album, duration, popularity, is_explicit) {
+    this.song_id = song_id;
     this.title = title;
-    this.artist = artist;
+    this.artists = artists;
     this.album = album;
     this.duration = duration;
-    this.explicit = false; // default value
+    this.popularity = popularity;
+    this.is_explicit = is_explicit;
   }
 
-  add_to_playlist(playlist) {
-    userLibrary.playlists[playlist].add_song(this);
-    // and SQL stuff
+  add_to_playlist(playlist_id) {
+    userLibrary.playlists[playlist_id].add_song(this);
   }
 }
 
@@ -21,18 +19,36 @@ class Playlist {
     this.songs = songs;
   }
 
-  add_song(song) {
+  async add_song(song) {
     if (song != null) {
       this.songs.push(song);
+    //   try {
+    //         const [results, fields] = await pool.query(
+    //           'INSERT INTO playlist_song (playlist_id, spotify_id) VALUES (?, ?)', [this.playlist_id, song.song_id] //'playlist_song' is the name of the relationship table
+    //         );
+    //         console.log(results); 
+    //         console.log(fields); 
+    //     } 
+    //     catch (err) {
+    //         console.log(err);
+    //     }
     }
   }
 
-  remove_song(index) {
+  async remove_song(index) {
     index = Number(index);
-    if (!Number.isNaN(index) && index >= 0 && index < this.songs.length) {
-      const songId = this.songs[index].id;
+    if (index >= 0 && index < this.songs.length) {
+      const song_Id = this.songs[index].id;
       this.songs.splice(index, 1);
-      // and SQL stuff with index and id
+    //   try {
+    //       const [results, fields] = await pool.query(
+    //         'DELETE FROM playlist_song WHERE song_id=? AND index=?', [song_Id, index] //'playlist_song' is the name of the relationship table
+    //       );
+    //       console.log(results); 
+    //       console.log(fields); 
+    //     } catch (err) {
+    //       console.log(err);
+    //     }
     }
   }
 }
@@ -57,16 +73,16 @@ userLibrary.add_playlist(new Playlist());
 userLibrary.add_playlist(new Playlist());
 
 // temporary values for testing
-userLibrary.playlists[0].add_song('Song A');
-userLibrary.playlists[0].add_song('Song B');
-userLibrary.playlists[0].add_song('Song C');
-userLibrary.playlists[0].add_song('Song D');
-userLibrary.playlists[0].add_song('Song E');
-userLibrary.playlists[1].add_song('Song F');
-userLibrary.playlists[1].add_song('Song G');
-userLibrary.playlists[2].add_song('Song H');
-userLibrary.playlists[2].add_song('Song I');
-userLibrary.playlists[2].add_song('Song J');
+userLibrary.playlists[0].add_song(new Song(1, 'Song A', 'Artist A', 'Album A', 210, 80, 0));
+userLibrary.playlists[0].add_song(new Song(2, 'Song B', 'Artist B', 'Album B', 220, 85, 1));
+userLibrary.playlists[0].add_song(new Song(3, 'Song C', 'Artist C', 'Album C', 230, 90, 0));
+userLibrary.playlists[0].add_song(new Song(4, 'Song D', 'Artist D', 'Album D', 240, 95, 1));
+userLibrary.playlists[0].add_song(new Song(5, 'Song E', 'Artist E', 'Album E', 250, 100, 0));
+userLibrary.playlists[1].add_song(new Song(6, 'Song F', 'Artist F', 'Album F', 260, 105, 1));
+userLibrary.playlists[1].add_song(new Song(7, 'Song G', 'Artist G', 'Album G', 270, 110, 0));
+userLibrary.playlists[2].add_song(new Song(8, 'Song H', 'Artist H', 'Album H', 280, 115, 1));
+userLibrary.playlists[2].add_song(new Song(9, 'Song I', 'Artist I', 'Album I', 290, 120, 0));
+userLibrary.playlists[2].add_song(new Song(10, 'Song J', 'Artist J', 'Album J', 300, 125, 1));
 
 function renderLibrary() {
   const container = document.getElementById('library');
@@ -111,7 +127,7 @@ function renderPlaylist(playlist_index) {
   const ul = document.createElement('ul');
   userLibrary.playlists[playlist_index].songs.forEach((song, i) => {
     const li = document.createElement('li');
-    li.textContent = song;
+    li.textContent = song.title;
 
     const btn = document.createElement('button');
     btn.type = 'button';
@@ -154,16 +170,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   playlistContainer.addEventListener('click', (e) => {
-    console.log('Playlist container clicked', e);
     const btn = e.target;
     if (btn.classList && btn.classList.contains('remove-song')) {
       const idx = btn.dataset.index;
-      console.log('Removing index', idx);
       userLibrary.playlists[playlist_index].remove_song(idx);
       renderPlaylist(playlist_index); // re-render with updated indexes
     }
     if (btn.id === 'back-to-library') {
-      console.log('Back to library button clicked');
       unrenderPlaylist();
     }
   });
